@@ -1,0 +1,104 @@
+html {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sand-serf, monospace;
+}
+
+body {
+    background-color: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    border: 1px solid lightgray;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+nav ul {
+    display: flex;
+    list-style-type: none;
+    margin-block: 0;
+    padding-inline: 0;
+    justify-content: flex-end;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+nav li {
+    margin-left: 1.5rem;
+}
+
+nav li:first-child {
+    margin-left: 0;
+}
+
+nav a {
+    font-style: italic;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: yellow;
+}
+
+nav a:visited {
+    color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+}
+
+.board div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+}
+
+.board div:last-child {
+    margin-bottom: 0;
+}
+
+.board div p {
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+    padding: 0.25rem;
+    border: 2px solid lightblue;
+    margin: 0 0.25rem 0 0;
+    padding: 0.5rem;
+}
+
+.board div p:last-child {
+    margin-right: 0;
+}
+
+.keyboard {
+    margin-top: 1rem;
+}
+
+.keyboard a {
+    margin: 0 0.25rem 0.25rem 0;
+    background-color: lightskyblue;
+    padding: 0.5rem;
+    min-width: 1.1rem;
+    text-align: center;
+    cursor:pointer;
+    padding: 0.5rem;
+    font-weight: 700;
+    border-radius: 0.25rem;
+}
+
+#enter-key, #bs-key {
+    font-size: 0.5rem;
+    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+}
