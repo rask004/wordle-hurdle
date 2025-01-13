@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />{% endblock %}
 {% block content %}
+<div class="container">
+    <div id="message" hidden></div>
+</div>
 <div class="container">
     <div class="board">
         <div>
@@ -43,3 +47,4 @@
     </div>
 </div>
 {% endblock %}
+{% block js %}<script src="{{ url_for('static', filename='index.js') }}"></script>{% endblock %}

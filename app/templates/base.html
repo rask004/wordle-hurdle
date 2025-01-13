@@ -3,7 +3,7 @@
         <head>
             <title>{% block title %}Wordle Hurdle Prototype{% endblock %} - Flaskr</title>
             <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-            <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+            {% block css %}{% endblock %}
     </head>
     <body>
         <nav>
@@ -17,4 +17,5 @@
             {% block content %}{% endblock %}
         </section>
     </body>
+    {% block js %}{% endblock %}
 </html>
