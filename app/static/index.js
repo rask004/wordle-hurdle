@@ -5,6 +5,7 @@ const URL_GET_WORDS_ALL = '/api/request/all'
 const MAX_GUESS_LETTER = 5
 const MAX_GUESS_WORDS = 5
 
+var allWords = []
 var guess = 1
 var index = 1
 var correctWordIndex = 0
@@ -22,12 +23,16 @@ const press_enter = () => {
         console.log('ENTER: word not complete')
         return
     }
+    else if (!allWords.includes(currentGuess)) {
+        console.log('Not a word!')
+        return
+    }
     const correctWord = correctWords[correctWordIndex]
-    console.log(currentGuess, correctWord)
+    // console.log(currentGuess, correctWord)
     let correct_letter_count = 0
     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
         const e = document.querySelector(`#g-${index}-${i + 1}`)
-        console.log(e, currentGuess[i], correctWord[i], currentGuess[i] == correctWord[i], correctWord.includes(currentGuess[i]))
+        // console.log(e, currentGuess[i], correctWord[i], currentGuess[i] == correctWord[i], correctWord.includes(currentGuess[i]))
         if (currentGuess[i] == correctWord[i]) {
             e.classList.add('green')
             correct_letter_count++
@@ -54,13 +59,12 @@ const press_enter = () => {
 }
 
 const request_words = async () => {
-    const response = await fetch(URL_GET_WORDS_MANY);
+    const response = await fetch(URL_GET_WORDS_ALL);
     if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json()
     const words = json['words']
-    console.log('words = ', words)
     return words
 }
 
@@ -93,7 +97,7 @@ const press_backspace = () => {
     } else {
         currentGuess = currentGuess.slice(0, currentGuess.length - 1)
     }
-    console.log(`#g-${index}-${guess}`)       // DEBUG
+    // console.log(`#g-${index}-${guess}`)       // DEBUG
 }
 
 const finalize_game = () => {
@@ -112,10 +116,22 @@ const finalize_game = () => {
 
 
 const init_game = async () => {
-    correctWords = await request_words()
-    // console.log('correctwords =', correctWords)
-    for (let i = 0; i < correctWords.length; i++) {
-        correctWords[i] = correctWords[i].toUpperCase()
+    allWords = await request_words()
+
+    if (allWords.length < 5) {
+        throw Error("The source word list is not big enough. It should have at least 5 words.")
+    }
+    for (let i = 0; i < allWords.length; i++) {
+        allWords[i] = allWords[i].toUpperCase()
+    }
+    let usedIndices = []
+    while (correctWords.length < 5) {
+        let ndx = Math.round(Math.random() * allWords.length)
+        if (usedIndices.includes(ndx)) {
+            // skip if this word is already used. Ndx comparison faster than with strings
+            continue
+        }
+        correctWords.push(allWords[ndx])
     }
     const anchors = document.querySelectorAll('a')
     for (const anchor of anchors) {
@@ -134,6 +150,8 @@ const init_game = async () => {
     enter.addEventListener('click', () => {
         press_enter()
     })
+
+    console.log('correctwords =', correctWords)
 }
 
 window.onload = init_game;
