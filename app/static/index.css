@@ -64,17 +64,20 @@
     min-height: 1rem;
 }
 
-.green {
+.green,
+.keyboard a.green {
     background-color: #50FF50;
     border-color: #50FF50;
 }
 
-.yellow {
+.yellow,
+.keyboard a.yellow {
     background-color: goldenrod;
     border-color: goldenrod;
 }
 
-.grey {
+.grey,
+.keyboard a.grey {
     background-color: #AAAAAA;
     border-color: #AAAAAA;
 }

@@ -30,16 +30,28 @@ const press_enter = () => {
     const correctWord = correctWords[correctWordIndex]
     // console.log(currentGuess, correctWord)
     let correct_letter_count = 0
+    const keyboard = Array.from(document.querySelectorAll(`a`)).filter(item => item.text.length == 1)
     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
         const e = document.querySelector(`#g-${index}-${i + 1}`)
-        // console.log(e, currentGuess[i], correctWord[i], currentGuess[i] == correctWord[i], correctWord.includes(currentGuess[i]))
-        if (currentGuess[i] == correctWord[i]) {
+        const letter = currentGuess[i]
+        const keyElements = keyboard.filter(item => item.text === letter && item.classList.length === 0)
+
+        if (letter == correctWord[i]) {
             e.classList.add('green')
             correct_letter_count++
-        } else if (!correctWord.includes(currentGuess[i])) {
+            if (keyElements.length > 0) {
+                keyElements[0].classList.add('green')
+            }
+        } else if (!correctWord.includes(letter)) {
             e.classList.add('grey')
+            if (keyElements.length > 0) {
+                keyElements[0].classList.add('grey')
+            }
         } else {
             e.classList.add('yellow')
+            if (keyElements.length > 0) {
+                keyElements[0].classList.add('yellow')
+            }
         }
     }
 
@@ -76,6 +88,7 @@ const press_letter = (letter) => {
         return
     }
     else if (guess > MAX_GUESS_LETTER) {
+        console.log('Cannot insert more letters, for this guess')
         return
     }
 
@@ -87,6 +100,7 @@ const press_letter = (letter) => {
 
 const press_backspace = () => {
     if (guess === 1) {
+        console.log('all letters already removed, for this guess')
         return
     }
     guess -= 1
