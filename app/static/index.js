@@ -34,25 +34,30 @@ const press_enter = () => {
     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
         const e = document.querySelector(`#g-${index}-${i + 1}`)
         const letter = currentGuess[i]
-        const keyElements = keyboard.filter(item => item.text === letter && item.classList.length === 0)
+        const keyElement = keyboard.filter(item => item.text === letter)[0]
 
         if (letter == correctWord[i]) {
             e.classList.add('green')
+            // console.log("GREEN = ", e, keyElement)
             correct_letter_count++
-            if (keyElements.length > 0) {
-                keyElements[0].classList.add('green')
+            if (keyElement.classList.length > 0) {
+                keyElement.classList.remove('yellow')
             }
-        } else if (!correctWord.includes(letter)) {
-            e.classList.add('grey')
-            if (keyElements.length > 0) {
-                keyElements[0].classList.add('grey')
+            keyElement.classList.add('green')
+        } else if (correctWord.includes(letter)) {
+            e.classList.add('yellow')
+            // console.log("YELLOW = ", e, keyElement)
+            if (keyElement.classList.length == 0) {
+                keyElement.classList.add('yellow')
             }
         } else {
-            e.classList.add('yellow')
-            if (keyElements.length > 0) {
-                keyElements[0].classList.add('yellow')
+            e.classList.add('grey')
+            // console.log("GREY = ", e, keyElement)
+            if (keyElement.classList.length == 0) {
+                keyElement.classList.add('grey')
             }
         }
+        e.style.animationDelay = `${i * 0.5}s`;
     }
 
     if (correct_letter_count >= 5) {
@@ -124,7 +129,7 @@ const finalize_game = () => {
     }
     const element = document.querySelector(`#message`)
     element.innerHTML = message
-    element.removeAttribute('hidden')
+    element.classList.add('show')
 
 }
 

@@ -1,6 +1,6 @@
 html {
     font-size: 20px;
-    font-family: Arial, Helvetica, sand-serf, monospace;
+    font-family: Arial, Helvetica, san-serif, monospace;
 }
 
 body {
@@ -15,6 +15,7 @@ nav {
     padding: 1rem;
     margin-bottom: 1rem;
 }
+
 nav ul {
     display: flex;
     list-style-type: none;
@@ -48,4 +49,3 @@ nav a:hover {
 nav a:visited {
     color: white;
 }
-
