@@ -249,27 +249,41 @@
     margin-top: 1rem;
 }
 
-.keyboard a {
-    margin: 0 0.25rem 0.25rem 0;
+.keyboard div {
+    margin-bottom: 0.4rem;
+}
+
+.keyboard button {
+    margin: 0 0.4rem 0 0;
     background-color: lightskyblue;
-    padding: 0.5rem;
-    min-width: 1.1rem;
+    border: solid lightskyblue 2px;
+    min-width: 2rem;
     text-align: center;
     cursor: pointer;
     padding: 0.5rem;
     font-weight: 700;
     border-radius: 0.25rem;
+    padding: 0.75rem 0.5rem;
 }
 
-.keyboard a:hover,
-.keyboard a:active {
+.keyboard button[disabled] {
+    color: black;
+}
+
+.keyboard button:hover,
+.keyboard button:active {
     opacity: 0.85;
+}
+
+.keyboard button:active {
+    border-color: white !important;
+    border-radius: 0.33rem !important;
 }
 
 #enter-key,
 #bs-key {
-    font-size: 0.5rem;
-    padding: 0.75rem 0.75rem 0.5rem 0.75rem;
+    font-size: 0.6rem;
+    padding: 0.75rem;
 }
 
 #message {
@@ -291,7 +305,7 @@
     animation: to-green 0.5s linear forwards;
 }
 
-.keyboard a.green {
+.keyboard button.green {
     background-color: #00ef00;
     border-color: #00ef00;
     font-weight: 700;
@@ -301,7 +315,7 @@
     animation: to-yellow 0.5s linear forwards;
 }
 
-.keyboard a.yellow {
+.keyboard button.yellow {
     background-color: #e79b0b;
     border-color: #e79b0b;
     font-weight: 700;
@@ -311,7 +325,7 @@
     animation: to-grey 0.5s linear forwards;
 }
 
-.keyboard a.grey {
+.keyboard button.grey {
     background-color: #AAAAAA;
     border-color: #AAAAAA;
     font-weight: 700;
