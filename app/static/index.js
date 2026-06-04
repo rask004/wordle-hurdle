@@ -40,46 +40,38 @@ const update_ui = (selector, letter, newClass) => {
 
 
 const set_keyboard_active = (active = true) => {
+    console.log("keyboard active =", active)
+    const bsKey = document.querySelector('#bs-key')
     const enterKey = document.querySelector("#enter-key")
     if (active) {
         enterKey.removeAttribute("disabled")
+        bsKey.removeAttribute("disabled")
     } else {
         enterKey.setAttribute("disabled", 'true')
+        bsKey.setAttribute("disabled", 'true')
     }
-    for (const keyElement of keyboard) {
+    keyboard.forEach((keyElement) => {
         if (active) {
             keyElement.removeAttribute("disabled")
         } else {
             keyElement.setAttribute("disabled", "true")
         }
-    }
-}
-
-
-const clear_keyboard = () => {
-    for (const key of keyboard) {
-        key.className = ''
-    }
+    })
 }
 
 
 const press_enter = () => {
-
-    if (index > MAX_GUESS_WORDS ||
-        currentGuess.length < MAX_GUESS_LETTER ||
-        !allWords.includes(currentGuess)) {
+    if (index > MAX_GUESS_WORDS || currentGuess.length < MAX_GUESS_LETTER || !allWords.includes(currentGuess)) {
         make_shake_animation()
         return
     }
 
     set_keyboard_active(false)
-
     const correctWord = correctWords[correctWordIndex]
     let correct_letter_count = 0
     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
         const selector = `#g-${index}-${i + 1}`
         const letter = currentGuess[i]
-
         if (letter == correctWord[i]) {
             correct_letter_count++
             update_ui(selector, letter, 'green')
@@ -88,18 +80,9 @@ const press_enter = () => {
         } else {
             update_ui(selector, letter, 'grey')
         }
-
         const e = document.querySelector(selector)
         e.style.animationDelay = `${i * ANIMATION_DELAY}s`;
     }
-
-    // const oldIndex = index
-    // setTimeout(() => {
-    //     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
-    //         const selector = `#g-${oldIndex}-${i + 1}`
-    //         document.querySelector(selector).style.animationDelay = ''
-    //     }
-    // }, ANIMATION_DELAY * MAX_GUESS_LETTER * 1000 + 1)
 
     if (correct_letter_count >= 5 || index >= MAX_GUESS_WORDS) {
         setTimeout(() => {
@@ -169,16 +152,21 @@ const press_backspace = () => {
 const finish_round = () => {
     let correctWord = correctWords[correctWordIndex]
 
-    if (correctWord != currentGuess &&
+    console.log(correctWord, currentGuess, correctWordIndex, MAX_ROUNDS - 1)
+    if (correctWord == currentGuess &&
         correctWordIndex >= MAX_ROUNDS - 1) {
         end_game(true)
+        return
+    }
+    else if (correctWord != currentGuess) {
+        end_game(false)
         return
     }
 
     correctWordIndex++
     correctWord = correctWords[correctWordIndex]
     reset_board()
-    clear_keyboard()
+    keyboard.forEach((k) => k.className = '')
     index = 1
 
     if (correctWordIndex < MAX_ROUNDS - 1) {
@@ -194,7 +182,7 @@ const finish_round = () => {
             press_enter()
         }, ANIMATION_DELAY * 1000 + 2)
 
-    } else if (correctWordIndex == MAX_ROUNDS - 1) {
+    } else if (correctWordIndex >= MAX_ROUNDS - 1) {
         setTimeout(() => {
             let letter
             let selector
@@ -236,6 +224,9 @@ const end_game = (winState) => {
     element.classList.add('show')
     guess = 1
     index = MAX_GUESS_WORDS + 1
+    setTimeout(() => {
+        set_keyboard_active(false)
+    }, ANIMATION_DELAY * 1000)
 }
 
 const reset_board = () => {
@@ -294,22 +285,14 @@ const init_game = async () => {
         }
         correctWords.push(allWords[ndx])
     }
-    for (const key of keyboard) {
+    keyboard.forEach((key) => {
         const letter = key.innerHTML
         key.addEventListener('click', () => {
             press_letter(letter)
         })
-    }
-    const bs = document.querySelector('#bs-key')
-    bs.addEventListener('click', () => {
-        press_backspace()
     })
-    const enter = document.querySelector('#enter-key')
-    enter.addEventListener('click', () => {
-        press_enter()
-    })
-
-    console.log('correctwords =', correctWords)
+    document.querySelector('#bs-key').addEventListener('click', press_backspace)
+    document.querySelector('#enter-key').addEventListener('click', press_enter)
 }
 
 window.onload = init_game;

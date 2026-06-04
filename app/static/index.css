@@ -1,3 +1,17 @@
+:root {
+    --plain-blue: #83D1FF;
+    --border-blue: #4FBEFF;
+    --hover-border-blue: #17A2F5;
+    --active-blue: #BFE7FF;
+    --key-grey: #AAAAAA;
+    --key-yellow: #e79b0b;
+    --border-key-yellow: #AE7200;
+    --hover-border-yellow: #764d00;
+    --key-green: #00df28;
+    --border-key-green: #00B820;
+    --hover-border-green: #008217;
+}
+
 @keyframes shake {
     0% {
         margin-top: 0;
@@ -27,16 +41,16 @@
 
 @keyframes grey-to-initial {
     0% {
-        background-color: #AAAAAA;
-        border-color: #AAAAAA;
+        background-color: var(--key-grey);
+        border-color: var(--key-grey);
         font-weight: 700;
         color: black;
         transform: scaleX(1);
     }
 
     49.9% {
-        background-color: #AAAAAA;
-        border-color: #AAAAAA;
+        background-color: var(--key-grey);
+        border-color: var(--key-grey);
         font-weight: 700;
         color: black;
         transform: scaleX(0);
@@ -44,7 +58,7 @@
 
     50% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(0);
@@ -52,7 +66,7 @@
 
     99.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(1);
@@ -65,16 +79,16 @@
 
 @keyframes yellow-to-initial {
     0% {
-        background-color: #e79b0b;
-        border-color: #e79b0b;
+        background-color: var(--key-yellow);
+        border-color: var(--key-yellow);
         font-weight: 700;
         color: black;
         transform: scaleX(1);
     }
 
     49.9% {
-        background-color: #e79b0b;
-        border-color: #e79b0b;
+        background-color: var(--key-yellow);
+        border-color: var(--key-yellow);
         font-weight: 700;
         color: black;
         transform: scaleX(0);
@@ -82,7 +96,7 @@
 
     50% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(0);
@@ -90,7 +104,7 @@
 
     99.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(1);
@@ -103,16 +117,16 @@
 
 @keyframes green-to-initial {
     0% {
-        background-color: #00ef00;
-        border-color: #00ef00;
+        background-color: var(--key-green);
+        border-color: var(--key-green);
         font-weight: 700;
         color: black;
         transform: scaleX(1);
     }
 
     49.9% {
-        background-color: #00ef00;
-        border-color: #00ef00;
+        background-color: var(--key-green);
+        border-color: var(--key-green);
         font-weight: 700;
         color: black;
         transform: scaleX(0);
@@ -120,7 +134,7 @@
 
     50% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(0);
@@ -128,7 +142,7 @@
 
     99.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         font-weight: 500;
         color: white;
         transform: scaleX(1);
@@ -142,27 +156,27 @@
 @keyframes to-green {
     0% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(1);
     }
 
     49.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(0);
     }
 
     50% {
-        background-color: #00ef00;
-        border-color: #00ef00;
+        background-color: var(--key-green);
+        border-color: var(--key-green);
         font-weight: 700;
         transform: scaleX(0);
         color: black;
     }
 
     100% {
-        background-color: #00ef00;
-        border-color: #00ef00;
+        background-color: var(--key-green);
+        border-color: var(--key-green);
         font-weight: 700;
         transform: scaleX(1);
         color: black;
@@ -172,27 +186,27 @@
 @keyframes to-yellow {
     0% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(1);
     }
 
     49.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(0);
     }
 
     50% {
-        background-color: #e79b0b;
-        border-color: #e79b0b;
+        background-color: var(--key-yellow);
+        border-color: var(--key-yellow);
         font-weight: 700;
         transform: scaleX(0);
         color: black;
     }
 
     100% {
-        background-color: #e79b0b;
-        border-color: #e79b0b;
+        background-color: var(--key-yellow);
+        border-color: var(--key-yellow);
         font-weight: 700;
         transform: scaleX(1);
         color: black;
@@ -202,27 +216,27 @@
 @keyframes to-grey {
     0% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(1);
     }
 
     49.9% {
         background-color: white;
-        border-color: lightskyblue;
+        border-color: var(--plain-blue);
         transform: scaleX(0);
     }
 
     50% {
-        background-color: #AAAAAA;
-        border-color: #AAAAAA;
+        background-color: var(--key-grey);
+        border-color: var(--key-grey);
         font-weight: 700;
         transform: scaleX(0);
         color: black;
     }
 
     100% {
-        background-color: #AAAAAA;
-        border-color: #AAAAAA;
+        background-color: var(--key-grey);
+        border-color: var(--key-grey);
         font-weight: 700;
         transform: scaleX(1);
         color: black;
@@ -262,7 +276,7 @@
 .board p {
     min-width: 1.25rem;
     min-height: 1.25rem;
-    border: 2px solid lightskyblue;
+    border: 2px solid var(--plain-blue);
     margin: 0 0.25rem 0 0;
     padding: 0.5rem;
     text-align: center;
@@ -282,8 +296,8 @@
 
 .keyboard button {
     margin: 0 0.4rem 0 0;
-    background-color: lightskyblue;
-    border: solid lightskyblue 2px;
+    background-color: var(--plain-blue);
+    border: 2px solid var(--border-blue);
     min-width: 2rem;
     text-align: center;
     cursor: pointer;
@@ -294,17 +308,18 @@
 }
 
 .keyboard button[disabled] {
-    color: black;
-}
-
-.keyboard button:hover,
-.keyboard button:active {
+    color: #333333;
     opacity: 0.85;
 }
 
+.keyboard button:hover {
+    border: 2px solid var(--hover-border-blue);
+}
+
 .keyboard button:active {
-    border-color: white !important;
-    border-radius: 0.33rem !important;
+    background-color: var(--active-blue);
+    color: black;
+    border: 2px solid var(--border-blue);
 }
 
 #enter-key,
@@ -316,7 +331,7 @@
 #message {
     margin: 0.25rem 0.5rem 1rem 0.5rem;
     border-radius: 0.5rem;
-    background-color: lightskyblue;
+    background-color: var(--plain-blue);
     font-size: 0.75rem;
     padding: 1rem;
     min-height: 1.25rem;
@@ -333,9 +348,19 @@
 }
 
 .keyboard button.green {
-    background-color: #00ef00;
-    border-color: #00ef00;
+    background-color: var(--key-green);
+    border-color: var(--border-key-green);
     font-weight: 700;
+}
+
+.keyboard button.green:hover {
+    border: 2px solid var(--hover-border-green);
+}
+
+.keyboard button.green:active {
+    background-color: var(--key-green);
+    color: black;
+    border: 2px solid var(--border-key-green);
 }
 
 .board p.yellow {
@@ -343,9 +368,19 @@
 }
 
 .keyboard button.yellow {
-    background-color: #e79b0b;
-    border-color: #e79b0b;
+    background-color: var(--key-yellow);
+    border-color: var(--border-key-yellow);
     font-weight: 700;
+}
+
+.keyboard button.yellow:hover {
+    border: 2px solid var(--hover-border-yellow);
+}
+
+.keyboard button.yellow:active {
+    background-color: var(--key-yellow);
+    color: black;
+    border: 2px solid var(--border-key-yellow);
 }
 
 .board p.grey {
@@ -353,8 +388,8 @@
 }
 
 .keyboard button.grey {
-    background-color: #AAAAAA;
-    border-color: #AAAAAA;
+    background-color: var(--key-grey);
+    border-color: var(--key-grey);
     font-weight: 700;
 }
 
