@@ -1,12 +1,10 @@
-const URL_GET_WORD_ONE = '/api/request'
-const URL_GET_WORDS_MANY = '/api/request/5'
 const URL_GET_WORDS_ALL = '/api/request/all'
 
 const MAX_GUESS_LETTER = 5
 const MAX_GUESS_WORDS = 5
 const MAX_ROUNDS = 5
-
 const ANIMATION_DELAY = 0.5
+const SHAKE_ANIMATION_DELAY = 0.125
 
 const keyboard = Array.from(document.querySelectorAll(`button`)).filter(item => item.textContent.length == 1)
 
@@ -23,7 +21,6 @@ const update_ui = (selector, letter, newClass) => {
     e.style.color = 'white'
     e.innerHTML = letter.toUpperCase()
     const keyElement = keyboard.filter(item => item.textContent === letter)[0]
-    e.classList.remove('reset-green', 'green', 'reset-yellow', 'yellow', 'reset-grey', 'grey')
     if (newClass == 'green') {
         keyElement.classList.remove('yellow', 'grey')
         if (keyElement.classList.length == 0) {
@@ -34,10 +31,8 @@ const update_ui = (selector, letter, newClass) => {
         if (keyElement.classList.length == 0) {
             keyElement.classList.add('yellow')
         }
-    } else if (newClass == 'grey') {
-        if (keyElement.classList.length == 0) {
-            keyElement.classList.add('grey')
-        }
+    } else if (newClass == 'grey' && keyElement.classList.length == 0) {
+        keyElement.classList.add('grey')
     }
     e.classList.add(newClass)
     e.style.color = ''
@@ -45,46 +40,38 @@ const update_ui = (selector, letter, newClass) => {
 
 
 const set_keyboard_active = (active = true) => {
+    console.log("keyboard active =", active)
+    const bsKey = document.querySelector('#bs-key')
     const enterKey = document.querySelector("#enter-key")
     if (active) {
         enterKey.removeAttribute("disabled")
+        bsKey.removeAttribute("disabled")
     } else {
         enterKey.setAttribute("disabled", 'true')
+        bsKey.setAttribute("disabled", 'true')
     }
-    for (const keyElement of keyboard) {
+    keyboard.forEach((keyElement) => {
         if (active) {
             keyElement.removeAttribute("disabled")
         } else {
             keyElement.setAttribute("disabled", "true")
         }
-    }
+    })
 }
 
-const press_enter = () => {
 
-    console.log(currentGuess, correctWords[correctWordIndex])
-    if (index > MAX_GUESS_WORDS) {
-        console.log('Current game is finished')
-        return
-    }
-    else if (currentGuess.length < MAX_GUESS_LETTER) {
-        console.log('ENTER: word not complete')
-        return
-    }
-    else if (!allWords.includes(currentGuess)) {
-        console.log('Not a word!')
+const press_enter = () => {
+    if (index > MAX_GUESS_WORDS || currentGuess.length < MAX_GUESS_LETTER || !allWords.includes(currentGuess)) {
+        make_shake_animation()
         return
     }
 
     set_keyboard_active(false)
-
     const correctWord = correctWords[correctWordIndex]
-    // console.log(currentGuess, correctWord)
     let correct_letter_count = 0
     for (let i = 0; i < MAX_GUESS_LETTER; i++) {
         const selector = `#g-${index}-${i + 1}`
         const letter = currentGuess[i]
-
         if (letter == correctWord[i]) {
             correct_letter_count++
             update_ui(selector, letter, 'green')
@@ -93,12 +80,9 @@ const press_enter = () => {
         } else {
             update_ui(selector, letter, 'grey')
         }
-
         const e = document.querySelector(selector)
         e.style.animationDelay = `${i * ANIMATION_DELAY}s`;
     }
-
-    console.log(currentGuess, correctWords[correctWordIndex], correct_letter_count, index)
 
     if (correct_letter_count >= 5 || index >= MAX_GUESS_WORDS) {
         setTimeout(() => {
@@ -126,13 +110,8 @@ const request_words = async () => {
 }
 
 const press_letter = (letter) => {
-    //console.log(guess, index, letter, `#g-${index}-${guess}`)       // DEBUG
-    if (index > MAX_GUESS_WORDS) {
-        console.log('Current game is finished')
-        return
-    }
-    else if (guess > MAX_GUESS_LETTER) {
-        console.log('Cannot insert more letters, for this guess')
+    if (index > MAX_GUESS_WORDS || guess > MAX_GUESS_LETTER) {
+        make_shake_animation()
         return
     }
     const element = document.querySelector(`#g-${index}-${guess}`)
@@ -141,13 +120,23 @@ const press_letter = (letter) => {
     currentGuess = currentGuess.concat(letter)
 }
 
-const press_backspace = () => {
-    if (guess === 1) {
-        console.log('all letters already removed, for this guess')
-        return
+const make_shake_animation = () => {
+    set_keyboard_active(false)
+    for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
+        document.querySelector(`#g-${index}-${i}`).classList.add('shake')
     }
-    else if (index >= 6) {
-        console.log('Current game is finished')
+
+    setTimeout(() => {
+        for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
+            document.querySelector(`#g-${index}-${i}`).classList.remove('shake')
+        }
+        set_keyboard_active()
+    }, SHAKE_ANIMATION_DELAY * 3 * 1000 - 10)
+}
+
+const press_backspace = () => {
+    if (guess === 1 || index > MAX_GUESS_WORDS) {
+        make_shake_animation()
         return
     }
     guess -= 1
@@ -158,59 +147,54 @@ const press_backspace = () => {
     } else {
         currentGuess = currentGuess.slice(0, currentGuess.length - 1)
     }
-    // console.log(`#g-${index}-${guess}`)       // DEBUG
 }
 
 const finish_round = () => {
     let correctWord = correctWords[correctWordIndex]
 
-    if (correctWord != currentGuess) {
-        win_game(false)
+    console.log(correctWord, currentGuess, correctWordIndex, MAX_ROUNDS - 1)
+    if (correctWord == currentGuess &&
+        correctWordIndex >= MAX_ROUNDS - 1) {
+        end_game(true)
         return
     }
-    else if (correctWord == currentGuess && correctWordIndex >= MAX_ROUNDS - 1) {
-        win_game(true)
+    else if (correctWord != currentGuess) {
+        end_game(false)
         return
     }
 
     correctWordIndex++
+    correctWord = correctWords[correctWordIndex]
     reset_board()
+    keyboard.forEach((k) => k.className = '')
     index = 1
 
     if (correctWordIndex < MAX_ROUNDS - 1) {
         setTimeout(() => {
-            correctWord = correctWords[correctWordIndex]
-            currentGuess = correctWords[correctWordIndex - 1]
-            for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
-                const selector = `#g-1-${i}`
-                const letter = currentGuess[i - 1].toUpperCase()
-                if (letter == correctWord[i]) {
-                    update_ui(selector, letter, 'green')
-                } else if (correctWord.includes(letter)) {
-                    update_ui(selector, letter, 'yellow')
-                } else {
-                    update_ui(selector, letter, 'grey')
-                }
-                const e = document.querySelector(selector)
-                e.style.animationDelay = `${i * ANIMATION_DELAY}s`;
-            }
+            const tmp = correctWords[correctWordIndex - 1]
             currentGuess = ""
-            setTimeout(set_keyboard_active, MAX_GUESS_LETTER * ANIMATION_DELAY * 1000 + 10)
+            guess = 1
+            index = 1
+            for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
+                const letter = tmp[i - 1].toUpperCase()
+                press_letter(letter)
+            }
+            press_enter()
         }, ANIMATION_DELAY * 1000 + 2)
-        index = 2
 
-    } else if (correctWordIndex == MAX_ROUNDS - 1) {
+    } else if (correctWordIndex >= MAX_ROUNDS - 1) {
         setTimeout(() => {
-            const finalWord = correctWords[MAX_GUESS_WORDS - 1]
             let letter
             let selector
-            for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
-                for (let j = 1; j < MAX_GUESS_WORDS; j++) {
-                    selector = `#g-${j}-${i}`
-                    letter = correctWords[j - 1][i - 1].toUpperCase()
-                    if (letter == finalWord[i]) {
+
+            for (let i = 1; i < MAX_GUESS_WORDS; i++) {
+                currentGuess = correctWords[i - 1]
+                for (let j = 0; j < currentGuess.length; j++) {
+                    selector = `#g-${i}-${j + 1}`
+                    letter = currentGuess[j].toUpperCase()
+                    if (letter == correctWord[j]) {
                         update_ui(selector, letter, 'green')
-                    } else if (finalWord.includes(letter)) {
+                    } else if (correctWord.includes(letter)) {
                         update_ui(selector, letter, 'yellow')
                     } else {
                         update_ui(selector, letter, 'grey')
@@ -219,14 +203,15 @@ const finish_round = () => {
                 }
             }
             currentGuess = ""
-            setTimeout(set_keyboard_active, MAX_GUESS_LETTER * ANIMATION_DELAY * 1000 + 10)
         }, ANIMATION_DELAY * 1000 + 2)
         index = 5
     }
+    // guessed fudge factor for delay, calculations always too short?
+    setTimeout(set_keyboard_active, 6.28 * ANIMATION_DELAY * 1000)
     guess = 1
 }
 
-const win_game = (winState) => {
+const end_game = (winState) => {
     let message;
     if (winState) {
         message = "You Won!!"
@@ -239,6 +224,9 @@ const win_game = (winState) => {
     element.classList.add('show')
     guess = 1
     index = MAX_GUESS_WORDS + 1
+    setTimeout(() => {
+        set_keyboard_active(false)
+    }, ANIMATION_DELAY * 1000)
 }
 
 const reset_board = () => {
@@ -247,17 +235,16 @@ const reset_board = () => {
             const e = document.querySelector(`#g-${j}-${i}`)
             if (e.classList.contains('green')) {
                 e.classList.add('reset-green')
-                e.classList.remove('green')
             }
             else if (e.classList.contains('yellow')) {
                 e.classList.add('reset-yellow')
-                e.classList.remove('yellow')
-            } else {
+            } else if (e.classList.contains('grey')) {
                 e.classList.add('reset-grey')
-                e.classList.remove('grey')
+            } else {
+                e.classList.add('reset-clear')
             }
+            e.classList.remove('green', 'yellow', 'grey')
             e.style.animationDelay = `0s`
-            e.style.color = 'white'
         }
     }
     setTimeout(() => {
@@ -265,14 +252,18 @@ const reset_board = () => {
             for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
                 const e = document.querySelector(`#g-${j}-${i}`)
                 e.innerHTML = ''
-                e.style.color = ''
             }
         }
-    }, ANIMATION_DELAY * 1000 + 1)
-    const keyboard = Array.from(document.querySelectorAll(`a`)).filter(item => item.text.length == 1)
-    for (const key of keyboard) {
-        key.className = ''
-    }
+    }, ANIMATION_DELAY * 500)
+    setTimeout(() => {
+        for (let j = 1; j <= MAX_GUESS_WORDS; j++) {
+            for (let i = 1; i <= MAX_GUESS_LETTER; i++) {
+                const e = document.querySelector(`#g-${j}-${i}`)
+                e.className = ''
+                e.style.animationDelay = ''
+            }
+        }
+    }, ANIMATION_DELAY * 2 * 500)
 }
 
 
@@ -294,22 +285,14 @@ const init_game = async () => {
         }
         correctWords.push(allWords[ndx])
     }
-    for (const key of keyboard) {
+    keyboard.forEach((key) => {
         const letter = key.innerHTML
         key.addEventListener('click', () => {
             press_letter(letter)
         })
-    }
-    const bs = document.querySelector('#bs-key')
-    bs.addEventListener('click', () => {
-        press_backspace()
     })
-    const enter = document.querySelector('#enter-key')
-    enter.addEventListener('click', () => {
-        press_enter()
-    })
-
-    console.log('correctwords =', correctWords)
+    document.querySelector('#bs-key').addEventListener('click', press_backspace)
+    document.querySelector('#enter-key').addEventListener('click', press_enter)
 }
 
 window.onload = init_game;

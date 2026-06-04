@@ -1,8 +1,8 @@
-<!doctype html>
-    <html>
+<!DOCTYPE html>
+    <html lang="en">
         <head>
             <title>{% block title %}Wordle Hurdle Prototype{% endblock %} - Flaskr</title>
-            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+            <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
             {% block css %}{% endblock %}
     </head>
     <body>
@@ -10,7 +10,7 @@
             <ul>
                 <li><a href="\">Help</a></li>
                 <li><a href="\">Settings</a></li>
-                
+
             </ul>
         </nav>
         <section>
